@@ -2,8 +2,9 @@
 
 #define FOO __attribute__((annotate("FOO")))
 
-FOO int foo(int a, int b) {
-  return a + b;
+FOO void foo() {
+  return;
 }
 
-// CHECK:   func.func @foo(%arg0: i32, %arg1: i32) -> i32
+// CHECK:   func.func @foo() attributes
+// CHECK-SAME:  {annotations = ["FOO"], 
