@@ -5041,6 +5041,17 @@ MLIRASTConsumer::GetOrCreateMLIRFunction(const FunctionDecl *FD,
   if (!FD->isDefined(Def, /*checkforfriend*/ true))
     Def = FD;
 
+  // get annotations as well
+  SmallVector<mlir::Attribute> annotations;
+  if (!Def->attrs().empty()) {
+    mlir::OpBuilder builder(module->getContext());
+    for (auto const attr : Def->attrs()) {
+      if (auto anno = dyn_cast<AnnotateAttr>(attr)) {
+        annotations.emplace_back(builder.getStringAttr(anno->getAnnotation()));
+      }
+    }
+  }
+
   if (functions.find(name) != functions.end()) {
     auto function = functions[name];
 
@@ -5058,6 +5069,11 @@ MLIRASTConsumer::GetOrCreateMLIRFunction(const FunctionDecl *FD,
       NamedAttrList attrs(function->getAttrDictionary());
       attrs.set("llvm.linkage",
                 mlir::LLVM::LinkageAttr::get(builder.getContext(), lnk));
+
+      if (!annotations.empty()) {
+        attrs.set("annotations", builder.getArrayAttr(annotations));
+      }
+
       function->setAttrs(attrs.getDictionary(builder.getContext()));
       functionsToEmit.push_back(Def);
     }
@@ -5166,6 +5182,9 @@ MLIRASTConsumer::GetOrCreateMLIRFunction(const FunctionDecl *FD,
   NamedAttrList attrs(function->getAttrDictionary());
   attrs.set("llvm.linkage",
             mlir::LLVM::LinkageAttr::get(builder.getContext(), lnk));
+  if (!annotations.empty()) {
+    attrs.set("annotations", builder.getArrayAttr(annotations));
+  }
   function->setAttrs(attrs.getDictionary(builder.getContext()));
 
   functions[name] = function;
