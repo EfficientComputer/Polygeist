@@ -32,6 +32,8 @@ add_mlir_dialect_library(MLIRPolygeistTransforms
   MLIRFuncDialect
   MLIRFuncTransforms
   MLIRGPUOps
+  MLIRGPUTransforms
+  MLIRGPUToNVVMTransforms
   MLIRIR
   MLIRLLVMDialect
   MLIRMathDialect

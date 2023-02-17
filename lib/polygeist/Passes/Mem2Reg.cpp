@@ -1066,13 +1066,7 @@ void removeRedundantBlockArgs(
   }
 }
 
-std::set<std::string> NonCapturingFunctions = {
-    "free",           "printf",       "fprintf",       "scanf",
-    "fscanf",         "gettimeofday", "clock_gettime", "getenv",
-    "strrchr",        "strlen",       "sprintf",       "sscanf",
-    "mkdir",          "fwrite",       "fread",         "memcpy",
-    "cudaMemcpy",     "memset",       "cudaMemset",    "__isoc99_scanf",
-    "__isoc99_fscanf"};
+extern std::set<std::string> NonCapturingFunctions;
 // fopen, fclose
 std::set<std::string> NoWriteFunctions = {"exit", "__errno_location"};
 // This is a straightforward implementation not optimized for speed. Optimize

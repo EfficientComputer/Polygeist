@@ -419,7 +419,13 @@ public:
   }
 };
 
-extern std::set<std::string> NonCapturingFunctions;
+std::set<std::string> NonCapturingFunctions = {
+    "free",           "printf",       "fprintf",       "scanf",
+    "fscanf",         "gettimeofday", "clock_gettime", "getenv",
+    "strrchr",        "strlen",       "sprintf",       "sscanf",
+    "mkdir",          "fwrite",       "fread",         "memcpy",
+    "cudaMemcpy",     "memset",       "cudaMemset",    "__isoc99_scanf",
+    "__isoc99_fscanf"};
 
 bool isCaptured(Value v, Operation *potentialUser = nullptr,
                 bool *seenuse = nullptr) {
